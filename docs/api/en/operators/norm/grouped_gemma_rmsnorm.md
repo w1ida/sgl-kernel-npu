@@ -2,14 +2,22 @@
 
 ## Hardware support
 
-| impl | arch22 | arch35 |
-| --- | --- | --- |
-| `triton` / `auto` | Supported | Supported |
-| `torch_native` | Supported | Supported |
+| impl | arch22 A3 | arch22 A2 | arch35 |
+| --- | --- | --- | --- |
+| `ascendc` / `auto` on arch22 | Supported | Supported | Not implemented |
+| `triton` / `auto` on arch35 | Supported | Supported | Supported |
+| `torch_native` | Supported | Supported | Supported |
+
+arch22 is split because the two members of that family were measured
+separately: A3 means the Ascend910_93 series, A2 the Ascend910B series. The
+Ascend C kernels are built by `SGL_KERNEL_ENABLE_A3_ONLY_OPS`, which covers
+every SoC outside the Ascend950 series, and their block counts are clamped to
+the runtime vector core count. An Ascend950 build omits them, so `auto` falls
+to Triton there.
 
 ## Signature
 
-`auto` → `triton`.
+`auto` → `ascendc` (arch22) / `triton` (arch35).
 
 ```python
 from sgl_kernel_npu.operators.norm import grouped_gemma_rmsnorm

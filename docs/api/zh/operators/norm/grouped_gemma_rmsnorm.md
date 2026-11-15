@@ -2,14 +2,20 @@
 
 ## 硬件支持
 
-| impl | arch22 | arch35 |
-| --- | --- | --- |
-| `triton` / `auto` | 支持 | 支持 |
-| `torch_native` | 支持 | 支持 |
+| impl | arch22 A3 | arch22 A2 | arch35 |
+| --- | --- | --- | --- |
+| `ascendc` / arch22 上的 `auto` | 支持 | 支持 | 未实现 |
+| `triton` / arch35 上的 `auto` | 支持 | 支持 | 支持 |
+| `torch_native` | 支持 | 支持 | 支持 |
+
+arch22 分列，因为该系列的两个成员是分别实测的：A3 指 Ascend910_93 系列，A2
+指 Ascend910B 系列。Ascend C kernel 由 `SGL_KERNEL_ENABLE_A3_ONLY_OPS` 构建，
+它覆盖除 Ascend950 系列以外的所有 SoC，其 block 数按运行时 vector core 数钳
+位。Ascend950 构建不含这些 kernel，因此该代上 `auto` 落到 Triton。
 
 ## 签名
 
-`auto` → `triton`.
+`auto` → `ascendc` (arch22) / `triton` (arch35).
 
 ```python
 from sgl_kernel_npu.operators.norm import grouped_gemma_rmsnorm

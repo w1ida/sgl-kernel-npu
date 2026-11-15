@@ -505,7 +505,7 @@ function build_cmake_modules()
     cmake "${cmake_args[@]}" \
         -B "$BUILD_DIR" \
         -S "$PROJECT_ROOT"
-    cmake --build "$BUILD_DIR" --target install -j 16
+    cmake --build "$BUILD_DIR" --target install -j 4
 }
 
 function build_deepep_kernels()
